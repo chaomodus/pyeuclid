@@ -58,7 +58,7 @@ class _EuclidMetaclass(type):
             dct['__getstate__'] = cls._create_getstate(dct['__slots__'])
             dct['__setstate__'] = cls._create_setstate(dct['__slots__'])
         if _use_slots:
-            return type.__new__(cls, name, bases + (object,), dct)
+            return type.__new__(cls, name, bases or (object,), dct)
         else:
             if '__slots__' in dct:
                 del dct['__slots__']
