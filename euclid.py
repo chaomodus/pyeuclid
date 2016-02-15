@@ -51,6 +51,7 @@ _enable_swizzle_set = False
 if _enable_swizzle_set:
     _use_slots = True
 
+
 # Implement _use_slots magic.
 class _EuclidMetaclass(type):
     def __new__(cls, name, bases, dct):
@@ -82,6 +83,7 @@ class _EuclidMetaclass(type):
 
 __metaclass__ = _EuclidMetaclass
 
+
 class Vector2:
     __slots__ = ['x', 'y']
     __hash__ = None
@@ -100,12 +102,10 @@ class Vector2:
 
     def __eq__(self, other):
         if isinstance(other, Vector2):
-            return self.x == other.x and \
-                   self.y == other.y
+            return self.x == other.x and self.y == other.y
         else:
             assert hasattr(other, '__len__') and len(other) == 2
-            return self.x == other[0] and \
-                   self.y == other[1]
+            return self.x == other[0] and self.y == other[1]
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -132,7 +132,7 @@ class Vector2:
             return tuple([(self.x, self.y)['xy'.index(c)] \
                           for c in name])
         except ValueError:
-            raise AttributeError, name
+            raise AttributeError(name)
 
     if _enable_swizzle_set:
         # This has detrimental performance on ordinary setattr as well
@@ -147,7 +147,7 @@ class Vector2:
                         l['xy'.index(c)] = v
                     self.x, self.y = l
                 except ValueError:
-                    raise AttributeError, name
+                    raise AttributeError(name)
 
     def __add__(self, other):
         if isinstance(other, Vector2):
@@ -219,7 +219,6 @@ class Vector2:
         return Vector2(operator.div(self.x, other),
                        operator.div(self.y, other))
 
-
     def __rdiv__(self, other):
         assert type(other) in (int, long, float)
         return Vector2(operator.div(other, self.x),
@@ -229,7 +228,6 @@ class Vector2:
         assert type(other) in (int, long, float)
         return Vector2(operator.floordiv(self.x, other),
                        operator.floordiv(self.y, other))
-
 
     def __rfloordiv__(self, other):
         assert type(other) in (int, long, float)
@@ -241,27 +239,23 @@ class Vector2:
         return Vector2(operator.truediv(self.x, other),
                        operator.truediv(self.y, other))
 
-
     def __rtruediv__(self, other):
         assert type(other) in (int, long, float)
         return Vector2(operator.truediv(other, self.x),
                        operator.truediv(other, self.y))
 
     def __neg__(self):
-        return Vector2(-self.x,
-                        -self.y)
+        return Vector2(-self.x, -self.y)
 
     __pos__ = __copy__
 
     def __abs__(self):
-        return math.sqrt(self.x ** 2 + \
-                         self.y ** 2)
+        return math.sqrt(self.x ** 2 + self.y ** 2)
 
     magnitude = __abs__
 
     def magnitude_squared(self):
-        return self.x ** 2 + \
-               self.y ** 2
+        return self.x ** 2 + self.y ** 2
 
     def normalize(self):
         d = self.magnitude()
@@ -279,8 +273,7 @@ class Vector2:
 
     def dot(self, other):
         assert isinstance(other, Vector2)
-        return self.x * other.x + \
-               self.y * other.y
+        return self.x * other.x + self.y * other.y
 
     def cross(self):
         return Vector2(self.y, -self.x)
@@ -300,6 +293,7 @@ class Vector2:
         """Return one vector projected on the vector other"""
         n = other.normalized()
         return self.dot(n)*n
+
 
 class Vector3:
     __slots__ = ['x', 'y', 'z']
@@ -356,7 +350,7 @@ class Vector3:
             return tuple([(self.x, self.y, self.z)['xyz'.index(c)] \
                           for c in name])
         except ValueError:
-            raise AttributeError, name
+            raise AttributeError(name)
 
     if _enable_swizzle_set:
         # This has detrimental performance on ordinary setattr as well
@@ -371,8 +365,7 @@ class Vector3:
                         l['xyz'.index(c)] = v
                     self.x, self.y, self.z = l
                 except ValueError:
-                    raise AttributeError, name
-
+                    raise AttributeError(name)
 
     def __add__(self, other):
         if isinstance(other, Vector3):
@@ -422,7 +415,6 @@ class Vector3:
                            self.y - other[1],
                            self.z - other[2])
 
-
     def __rsub__(self, other):
         if isinstance(other, Vector3):
             return Vector3(other.x - self.x,
@@ -465,7 +457,6 @@ class Vector3:
                        operator.div(self.y, other),
                        operator.div(self.z, other))
 
-
     def __rdiv__(self, other):
         assert type(other) in (int, long, float)
         return Vector3(operator.div(other, self.x),
@@ -477,7 +468,6 @@ class Vector3:
         return Vector3(operator.floordiv(self.x, other),
                        operator.floordiv(self.y, other),
                        operator.floordiv(self.z, other))
-
 
     def __rfloordiv__(self, other):
         assert type(other) in (int, long, float)
@@ -491,7 +481,6 @@ class Vector3:
                        operator.truediv(self.y, other),
                        operator.truediv(self.z, other))
 
-
     def __rtruediv__(self, other):
         assert type(other) in (int, long, float)
         return Vector3(operator.truediv(other, self.x),
@@ -499,23 +488,17 @@ class Vector3:
                        operator.truediv(other, self.z))
 
     def __neg__(self):
-        return Vector3(-self.x,
-                        -self.y,
-                        -self.z)
+        return Vector3(-self.x, -self.y, -self.z)
 
     __pos__ = __copy__
 
     def __abs__(self):
-        return math.sqrt(self.x ** 2 + \
-                         self.y ** 2 + \
-                         self.z ** 2)
+        return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
 
     magnitude = __abs__
 
     def magnitude_squared(self):
-        return self.x ** 2 + \
-               self.y ** 2 + \
-               self.z ** 2
+        return self.x ** 2 + self.y ** 2 + self.z ** 2
 
     def normalize(self):
         d = self.magnitude()
@@ -535,9 +518,7 @@ class Vector3:
 
     def dot(self, other):
         assert isinstance(other, Vector3)
-        return self.x * other.x + \
-               self.y * other.y + \
-               self.z * other.z
+        return self.x * other.x + self.y * other.y + self.z * other.z
 
     def cross(self, other):
         assert isinstance(other, Vector3)
@@ -558,7 +539,7 @@ class Vector3:
 
         # Adapted from equations published by Glenn Murray.
         # http://inside.mines.edu/~gmurray/ArbitraryAxisRotation/ArbitraryAxisRotation.html
-        x, y, z = self.x, self.y,self.z
+        x, y, z = self.x, self.y, self.z
         u, v, w = axis.x, axis.y, axis.z
 
         # Extracted common factors for simplicity and efficiency
@@ -568,7 +549,7 @@ class Vector3:
         st = math.sin(theta) / r
         dt = (u*x + v*y + w*z) * (1 - ct) / r2
         return Vector3((u * dt + x * ct + (-w * y + v * z) * st),
-                       (v * dt + y * ct + ( w * x - u * z) * st),
+                       (v * dt + y * ct + (w * x - u * z) * st),
                        (w * dt + z * ct + (-v * x + u * y) * st))
 
     def angle(self, other):
@@ -790,6 +771,7 @@ class Matrix3:
 # i j k l
 # m n o p
 
+
 class Matrix4:
     __slots__ = list('abcdefghijklmnop')
 
@@ -985,7 +967,7 @@ class Matrix4:
         return P
 
     def identity(self):
-        self.a = self.f = self.k = self.p = 1.
+        self.a = self.f = self.k = self.p = 1.0
         self.b = self.c = self.d = self.e = self.g = self.h = \
         self.i = self.j = self.l = self.m = self.n = self.o = 0
         return self
@@ -1465,49 +1447,35 @@ class Quaternion:
     new_rotate_euler = classmethod(new_rotate_euler)
 
     def new_rotate_matrix(cls, m):
-      if m[0*4 + 0] + m[1*4 + 1] + m[2*4 + 2] > 0.00000001:
-        t = m[0*4 + 0] + m[1*4 + 1] + m[2*4 + 2] + 1.0
-        s = 0.5/math.sqrt(t)
+        if m[0*4 + 0] + m[1*4 + 1] + m[2*4 + 2] > 0.00000001:
+            t = m[0*4 + 0] + m[1*4 + 1] + m[2*4 + 2] + 1.0
+            s = 0.5/math.sqrt(t)
+            return cls(s*t,
+                       (m[1*4 + 2] - m[2*4 + 1])*s,
+                       (m[2*4 + 0] - m[0*4 + 2])*s,
+                       (m[0*4 + 1] - m[1*4 + 0])*s)
+        elif m[0*4 + 0] > m[1*4 + 1] and m[0*4 + 0] > m[2*4 + 2]:
+            t = m[0*4 + 0] - m[1*4 + 1] - m[2*4 + 2] + 1.0
+            s = 0.5/math.sqrt(t)
+            return cls((m[1*4 + 2] - m[2*4 + 1])*s,
+                       s*t,
+                       (m[0*4 + 1] + m[1*4 + 0])*s,
+                       (m[2*4 + 0] + m[0*4 + 2])*s)
+        elif m[1*4 + 1] > m[2*4 + 2]:
+            t = -m[0*4 + 0] + m[1*4 + 1] - m[2*4 + 2] + 1.0
+            s = 0.5/math.sqrt(t)
+            return cls((m[2*4 + 0] - m[0*4 + 2])*s,
+                       (m[0*4 + 1] + m[1*4 + 0])*s,
+                       s*t,
+                       (m[1*4 + 2] + m[2*4 + 1])*s)
+        else:
+            t = -m[0*4 + 0] - m[1*4 + 1] + m[2*4 + 2] + 1.0
+            s = 0.5/math.sqrt(t)
+            return cls((m[0*4 + 1] - m[1*4 + 0])*s,
+                       (m[2*4 + 0] + m[0*4 + 2])*s,
+                       (m[1*4 + 2] + m[2*4 + 1])*s,
+                       s*t)
 
-        return cls(
-          s*t,
-          (m[1*4 + 2] - m[2*4 + 1])*s,
-          (m[2*4 + 0] - m[0*4 + 2])*s,
-          (m[0*4 + 1] - m[1*4 + 0])*s
-          )
-
-      elif m[0*4 + 0] > m[1*4 + 1] and m[0*4 + 0] > m[2*4 + 2]:
-        t = m[0*4 + 0] - m[1*4 + 1] - m[2*4 + 2] + 1.0
-        s = 0.5/math.sqrt(t)
-
-        return cls(
-          (m[1*4 + 2] - m[2*4 + 1])*s,
-          s*t,
-          (m[0*4 + 1] + m[1*4 + 0])*s,
-          (m[2*4 + 0] + m[0*4 + 2])*s
-          )
-
-      elif m[1*4 + 1] > m[2*4 + 2]:
-        t = -m[0*4 + 0] + m[1*4 + 1] - m[2*4 + 2] + 1.0
-        s = 0.5/math.sqrt(t)
-
-        return cls(
-          (m[2*4 + 0] - m[0*4 + 2])*s,
-          (m[0*4 + 1] + m[1*4 + 0])*s,
-          s*t,
-          (m[1*4 + 2] + m[2*4 + 1])*s
-          )
-
-      else:
-        t = -m[0*4 + 0] - m[1*4 + 1] + m[2*4 + 2] + 1.0
-        s = 0.5/math.sqrt(t)
-
-        return cls(
-          (m[0*4 + 1] - m[1*4 + 0])*s,
-          (m[2*4 + 0] + m[0*4 + 2])*s,
-          (m[1*4 + 2] + m[2*4 + 1])*s,
-          s*t
-          )
     new_rotate_matrix = classmethod(new_rotate_matrix)
 
     def new_interpolate(cls, q1, q2, t):
@@ -1553,12 +1521,10 @@ class Quaternion:
 
 class Geometry:
     def _connect_unimplemented(self, other):
-        raise AttributeError, 'Cannot connect %s to %s' % \
-            (self.__class__, other.__class__)
+        raise AttributeError('Cannot connect {} to {}'.format(self.__class__, other.__class__))
 
     def _intersect_unimplemented(self, other):
-        raise AttributeError, 'Cannot intersect %s and %s' % \
-            (self.__class__, other.__class__)
+        raise AttributeError('Cannot intersect {} and {}'.format(self.__class__, other.__class__))
 
     _intersect_point2 = _intersect_unimplemented
     _intersect_line2 = _intersect_unimplemented
@@ -1577,10 +1543,10 @@ class Geometry:
     _connect_plane = _connect_unimplemented
 
     def intersect(self, other):
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def connect(self, other):
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def distance(self, other):
         c = self.connect(other)
@@ -1588,8 +1554,10 @@ class Geometry:
             return c.length
         return 0.0
 
+
 def _intersect_point2_circle(P, C):
     return abs(P - C.c) <= C.r
+
 
 def _intersect_line2_line2(A, B):
     d = B.v.y * A.v.x - B.v.x * A.v.y
@@ -1607,6 +1575,7 @@ def _intersect_line2_line2(A, B):
 
     return Point2(A.p.x + ua * A.v.x,
                   A.p.y + ua * A.v.y)
+
 
 def _intersect_line2_circle(L, C):
     a = L.v.magnitude_squared()
@@ -1641,6 +1610,7 @@ def _intersect_line2_circle(L, C):
                         Point2(L.p.x + u2 * L.v.x,
                                L.p.y + u2 * L.v.y))
 
+
 def _connect_point2_line2(P, L):
     d = L.v.magnitude_squared()
     assert d != 0
@@ -1652,11 +1622,13 @@ def _connect_point2_line2(P, L):
                         Point2(L.p.x + u * L.v.x,
                                L.p.y + u * L.v.y))
 
+
 def _connect_point2_circle(P, C):
     v = P - C.c
     v.normalize()
     v *= C.r
     return LineSegment2(P, Point2(C.c.x + v.x, C.c.y + v.y))
+
 
 def _connect_line2_line2(A, B):
     d = B.v.y * A.v.x - B.v.x * A.v.y
@@ -1681,6 +1653,7 @@ def _connect_line2_line2(A, B):
     return LineSegment2(Point2(A.p.x + ua * A.v.x, A.p.y + ua * A.v.y),
                         Point2(B.p.x + ub * B.v.x, B.p.y + ub * B.v.y))
 
+
 def _connect_circle_line2(C, L):
     d = L.v.magnitude_squared()
     assert d != 0
@@ -1693,17 +1666,18 @@ def _connect_circle_line2(C, L):
     v *= C.r
     return LineSegment2(Point2(C.c.x + v.x, C.c.y + v.y), point)
 
+
 def _connect_circle_circle(A, B):
     v = B.c - A.c
     d = v.magnitude()
     if A.r >= B.r and d < A.r:
-        #centre B inside A
-        s1,s2 = +1, +1
+        # centre B inside A
+        s1, s2 = +1, +1
     elif B.r > A.r and d < B.r:
-        #centre A inside B
-        s1,s2 = -1, -1
+        # centre A inside B
+        s1, s2 = -1, -1
     elif d >= A.r and d >= B.r:
-        s1,s2 = +1, -1
+        s1, s2 = +1, -1
     v.normalize()
     return LineSegment2(Point2(A.c.x + s1 * v.x * A.r, A.c.y + s1 * v.y * A.r),
                         Point2(B.c.x + s2 * v.x * B.r, B.c.y + s2 * v.y * B.r))
@@ -1735,6 +1709,7 @@ class Point2(Vector2, Geometry):
         if c:
             return c._swap()
 
+
 class Line2(Geometry):
     __slots__ = ['p', 'v']
 
@@ -1753,18 +1728,18 @@ class Line2(Geometry):
                 self.p = args[0].copy()
                 self.v = args[1].copy()
             else:
-                raise AttributeError, '%r' % (args,)
+                raise AttributeError('%r' % (args,))
         elif len(args) == 1:
             if isinstance(args[0], Line2):
                 self.p = args[0].p.copy()
                 self.v = args[0].v.copy()
             else:
-                raise AttributeError, '%r' % (args,)
+                raise AttributeError('%r' % (args,))
         else:
-            raise AttributeError, '%r' % (args,)
+            raise AttributeError('%r' % (args,))
 
         if not self.v:
-            raise AttributeError, 'Line has zero-length vector'
+            raise AttributeError('Line has zero-length vector')
 
     def __copy__(self):
         return self.__class__(self.p, self.v)
@@ -1807,6 +1782,7 @@ class Line2(Geometry):
     def _connect_circle(self, other):
         return _connect_circle_line2(other, self)
 
+
 class Ray2(Line2):
     def __repr__(self):
         return 'Ray2(<%.2f, %.2f> + u<%.2f, %.2f>)' % \
@@ -1814,6 +1790,7 @@ class Ray2(Line2):
 
     def _u_in(self, u):
         return u >= 0.0
+
 
 class LineSegment2(Line2):
     def __repr__(self):
@@ -1836,6 +1813,7 @@ class LineSegment2(Line2):
         return self
 
     length = property(lambda self: abs(self.v))
+
 
 class Circle(Geometry):
     __slots__ = ['c', 'r']
@@ -1880,8 +1858,10 @@ class Circle(Geometry):
     def _connect_circle(self, other):
         return _connect_circle_circle(other, self)
 
+
 # 3D Geometry
 # -------------------------------------------------------------------------
+
 
 def _connect_point3_line3(P, L):
     d = L.v.magnitude_squared()
@@ -1895,16 +1875,19 @@ def _connect_point3_line3(P, L):
                                   L.p.y + u * L.v.y,
                                   L.p.z + u * L.v.z))
 
+
 def _connect_point3_sphere(P, S):
     v = P - S.c
     v.normalize()
     v *= S.r
     return LineSegment3(P, Point3(S.c.x + v.x, S.c.y + v.y, S.c.z + v.z))
 
+
 def _connect_point3_plane(p, plane):
     n = plane.n.normalized()
     d = p.dot(plane.n) - plane.k
     return LineSegment3(p, Point3(p.x - n.x * d, p.y - n.y * d, p.z - n.z * d))
+
 
 def _connect_line3_line3(A, B):
     assert A.v and B.v
@@ -1935,6 +1918,7 @@ def _connect_line3_line3(A, B):
                                B.p.y + ub * B.v.y,
                                B.p.z + ub * B.v.z))
 
+
 def _connect_line3_plane(L, P):
     d = P.n.dot(L.v)
     if not d:
@@ -1949,6 +1933,7 @@ def _connect_line3_plane(L, P):
                                             L.p.z + u * L.v.z), P)
     # Intersection
     return None
+
 
 def _connect_sphere_line3(S, L):
     d = L.v.magnitude_squared()
@@ -1965,17 +1950,18 @@ def _connect_sphere_line3(S, L):
     return LineSegment3(Point3(S.c.x + v.x, S.c.y + v.y, S.c.z + v.z),
                         point)
 
+
 def _connect_sphere_sphere(A, B):
     v = B.c - A.c
     d = v.magnitude()
     if A.r >= B.r and d < A.r:
-        #centre B inside A
-        s1,s2 = +1, +1
+        # centre B inside A
+        s1, s2 = +1, +1
     elif B.r > A.r and d < B.r:
-        #centre A inside B
-        s1,s2 = -1, -1
+        # centre A inside B
+        s1, s2 = -1, -1
     elif d >= A.r and d >= B.r:
-        s1,s2 = +1, -1
+        s1, s2 = +1, -1
 
     v.normalize()
     return LineSegment3(Point3(A.c.x + s1* v.x * A.r,
@@ -1984,6 +1970,7 @@ def _connect_sphere_sphere(A, B):
                         Point3(B.c.x + s2* v.x * B.r,
                                B.c.y + s2* v.y * B.r,
                                B.c.z + s2* v.z * B.r))
+
 
 def _connect_sphere_plane(S, P):
     c = _connect_point3_plane(S.c, P)
@@ -1996,6 +1983,7 @@ def _connect_sphere_plane(S, P):
     return LineSegment3(Point3(S.c.x + v.x, S.c.y + v.y, S.c.z + v.z),
                         p2)
 
+
 def _connect_plane_plane(A, B):
     if A.n.cross(B.n):
         # Planes intersect
@@ -2004,8 +1992,10 @@ def _connect_plane_plane(A, B):
         # Planes are parallel, connect to arbitrary point
         return _connect_point3_plane(A._get_point(), B)
 
+
 def _intersect_point3_sphere(P, S):
     return abs(P - S.c) <= S.r
+
 
 def _intersect_line3_sphere(L, S):
     a = L.v.magnitude_squared()
@@ -2033,6 +2023,7 @@ def _intersect_line3_sphere(L, S):
                                L.p.y + u2 * L.v.y,
                                L.p.z + u2 * L.v.z))
 
+
 def _intersect_line3_plane(L, P):
     d = P.n.dot(L.v)
     if not d:
@@ -2044,6 +2035,7 @@ def _intersect_line3_plane(L, P):
     return Point3(L.p.x + u * L.v.x,
                   L.p.y + u * L.v.y,
                   L.p.z + u * L.v.z)
+
 
 def _intersect_plane_plane(A, B):
     n1_m = A.n.magnitude_squared()
@@ -2059,6 +2051,7 @@ def _intersect_plane_plane(A, B):
                         c1 * A.n.y + c2 * B.n.y,
                         c1 * A.n.z + c2 * B.n.z),
                  A.n.cross(B.n))
+
 
 class Point3(Vector3, Geometry):
     def __repr__(self):
@@ -2093,6 +2086,7 @@ class Point3(Vector3, Geometry):
         if c:
             return c._swap()
 
+
 class Line3:
     __slots__ = ['p', 'v']
 
@@ -2111,18 +2105,18 @@ class Line3:
                 self.p = args[0].copy()
                 self.v = args[1].copy()
             else:
-                raise AttributeError, '%r' % (args,)
+                raise AttributeError('%r' % (args,))
         elif len(args) == 1:
             if isinstance(args[0], Line3):
                 self.p = args[0].p.copy()
                 self.v = args[0].v.copy()
             else:
-                raise AttributeError, '%r' % (args,)
+                raise AttributeError('%r' % (args,))
         else:
-            raise AttributeError, '%r' % (args,)
+            raise AttributeError('%r' % (args,))
 
         # XXX This is annoying.
-        #if not self.v:
+        # if not self.v:
         #    raise AttributeError, 'Line has zero-length vector'
 
     def __copy__(self):
@@ -2172,6 +2166,7 @@ class Line3:
         if c:
             return c
 
+
 class Ray3(Line3):
     def __repr__(self):
         return 'Ray3(<%.2f, %.2f, %.2f> + u<%.2f, %.2f, %.2f>)' % \
@@ -2179,6 +2174,7 @@ class Ray3(Line3):
 
     def _u_in(self, u):
         return u >= 0.0
+
 
 class LineSegment3(Line3):
     def __repr__(self):
@@ -2202,6 +2198,7 @@ class LineSegment3(Line3):
         return self
 
     length = property(lambda self: abs(self.v))
+
 
 class Sphere:
     __slots__ = ['c', 'r']
@@ -2251,6 +2248,7 @@ class Sphere:
         if c:
             return c
 
+
 class Plane:
     # n.p = k, where n is normal, p is point on plane, k is constant scalar
     __slots__ = ['n', 'k']
@@ -2271,13 +2269,13 @@ class Plane:
                 self.n = args[0].normalized()
                 self.k = args[1]
             else:
-                raise AttributeError, '%r' % (args,)
+                raise AttributeError('%r' % (args,))
 
         else:
-            raise AttributeError, '%r' % (args,)
+            raise AttributeError('%r' % (args,))
 
         if not self.n:
-            raise AttributeError, 'Points on plane are colinear'
+            raise AttributeError('Points on plane are colinear')
 
     def __copy__(self):
         return self.__class__(self.n, self.k)

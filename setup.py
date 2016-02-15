@@ -9,7 +9,7 @@ __version__ = '$Id$'
 from distutils.core import setup
 
 setup(name='euclid',
-      version='0.02',
+      version='0.03',
       description='2D and 3D vector, matrix, quaternion and geometry module',
       author='Alex Holkner',
       author_email='alex@partiallydisassembled.net',
